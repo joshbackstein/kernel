@@ -67,12 +67,16 @@ uint8_t make_color(enum vga_color fg, enum vga_color bg) {
 	return fg | bg << 4;
 }
 
+/* Get 16-bit value containing character and its color for VGA output.
+ */
 uint16_t make_vgaentry(char c, uint8_t color) {
 	uint16_t c16 = c;
 	uint16_t color16 = color;
 	return c16 | color16 << 8;
 }
 
+/* Get the length of the string.
+ */
 size_t strlen(const char* str) {
 	size_t ret = 0;
 	while ( str[ret] != 0 ) {
@@ -106,11 +110,15 @@ void terminal_setcolor(uint8_t color) {
 	terminal_color = color;
 }
 
+/* Add character withits color at the provided location.
+ */
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = make_vgaentry(c, color);
 }
 
+/* Shift everything in the terminal buffer up by one line.
+ */
 void terminal_scroll() {
 	for (size_t y = 0; y < VGA_HEIGHT - 1; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -145,6 +153,8 @@ void terminal_putchar(char c) {
 	}
 }
 
+/* Write string to terminal.
+ */
 void terminal_writestring(const char* data) {
 	size_t datalen = strlen(data);
 	for (size_t i = 0; i < datalen; i++) {
