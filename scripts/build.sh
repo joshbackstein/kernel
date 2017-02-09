@@ -221,8 +221,28 @@ echo -e "${COLORGREEN}OK:${COLOREND} Copied \"$LINKOUTDIR/$LINKOUTFILE\" to \"$I
 echo "Copying \"$IMAGEOUTDIR/conf/grub.cfg\" to \"$IMAGEOUTDIR/isoroot/boot/grub/grub.cfg\""
 cp "$IMAGEOUTDIR/conf/grub.cfg" "$IMAGEOUTDIR/isoroot/boot/grub/grub.cfg"
 echo -e "${COLORGREEN}OK:${COLOREND} Copied \"$IMAGEOUTDIR/conf/grub.cfg\" to \"$IMAGEOUTDIR/isoroot/boot/grub/grub.cfg\""
+
+# Now we will actually build the ISO file. To do this, we need grub-mkrescue.
+# If it doesn't exist, try grub2-mkrescue.
 echo "Building ISO as \"$IMAGEOUTDIR/$IMAGEOUTFILE\""
-grub2-mkrescue -o "$IMAGEOUTDIR/$IMAGEOUTFILE" "$IMAGEOUTDIR/isoroot"
+HASMKRESCUE=1
+type grub-mkrescue >/dev/null 2>&1 || HASGRUB=0
+if [ $HASMKRESCUE = 1 ] ; then
+  grub-mkrescue -o "$IMAGEOUTDIR/$IMAGEOUTFILE" "$IMAGEOUTDIR/isoroot"
+else
+  # We don't have grub-mkrescue, so check for grub2-mkrescue.
+  HASMKRESCUE=1
+  type grub2-mkrescue >/dev/null 2>&1 || HASGRUB=0
+
+  if [ $HASMKRESCUE = 1 ] ; then
+    grub2-mkrescue -o "$IMAGEOUTDIR/$IMAGEOUTFILE" "$IMAGEOUTDIR/isoroot"
+  else
+    # We're missing grub2-mkrescue too, so throw an error.
+	  echo -e "${COLORRED}ERROR:${COLOREND} Must have grub-mkrescue or grub2-mkrescue installed to build ISO."
+    exit 1
+  fi
+fi
+
 echo -e "${COLORGREEN}OK:${COLOREND} Image saved as \"$IMAGEOUTDIR/$IMAGEOUTFILE\""
 
 
