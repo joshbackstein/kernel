@@ -17,3 +17,7 @@ to continue hacking on it over time and see how far I can go with it.
 ### List:
 
 * Replace build scripts with makefile
+
+## References
+
+[OSDev.org Wiki](http://wiki.osdev.org/Main_Page)
