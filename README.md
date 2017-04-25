@@ -18,7 +18,7 @@ to continue hacking on it over time and see how far I can go with it.
 
 * Replace build scripts with makefile
 * ~~Bare Bones Tutorial~~
-* Meaty Skeleton Tutorial
+* ~~Meaty Skeleton Tutorial~~
 
 ## References
 
